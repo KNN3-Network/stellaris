@@ -1,0 +1,36 @@
+```
+export STARKNET_NETWORK=alpha-goerli
+export STARKNET_WALLET=starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount
+
+
+
+starknet declare --contract out/main.json
+
+
+starknet deploy --class_hash 0x462ee506c0b47ba56e05d9409fc7320d32d01d11db617228f08d8a42d1a1b47 \
+    --inputs 21806976760243566 19796 2764509738225222730632001221651244256434311306728969895596721352716317423526 2764509738225222730632001221651244256434311306728969895596721352716317423526 0  
+
+
+
+starknet invoke \
+    --address 0x06a6ec52d7ce5fdc2e170ffdccf2c7f712c1700f6ed364275a3c975ea02eab9f \
+    --abi out/main_abi.json \
+    --function grantRole \
+    --inputs 93433465781963921833282629 1422256080644353303509574200867499444944626641090688660432996235874362178186
+
+
+starknet call \
+    --address 0x06a6ec52d7ce5fdc2e170ffdccf2c7f712c1700f6ed364275a3c975ea02eab9f \
+    --abi out/main_abi.json \
+    --function hasRole \
+		--inputs 93433465781963921833282629 1422256080644353303509574200867499444944626641090688660432996235874362178186
+
+
+
+
+```
+
+## test
+```
+protostar test tests/test_main.cairo::*
+```

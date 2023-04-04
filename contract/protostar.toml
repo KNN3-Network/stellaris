@@ -1,0 +1,12 @@
+[project]
+lib-path = "lib"
+protostar-version = "0.9.2"
+
+[contracts]
+main = ["src/main.cairo"]
+
+
+# Shared Configuration Profile
+[profile.devnet.project]
+gateway-url = "http://127.0.0.1:5050/"
+chain-id = 1536727068981429685321

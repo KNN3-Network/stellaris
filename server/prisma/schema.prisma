@@ -1,0 +1,1383 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model F_Status {
+  id        String  @db.Uuid
+  dcp_table String? @db.VarChar(255)
+  uid       String? @db.VarChar(255)
+  address   String? @db.VarChar(255)
+
+  @@index([address], map: "f_status_address_index")
+  @@index([dcp_table], map: "f_status_dcp_table_index")
+  @@index([uid], map: "f_status_uid_index")
+  @@ignore
+}
+
+model S_Ice_Melting {
+  id                String  @id(map: "PK_7ef0bebcdc226a07a58d28ad887") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chain_id          String? @db.VarChar
+  contract_id       String? @db.VarChar
+  token_id          Int?
+  token_symbol      String? @db.VarChar
+  token_uri         String? @db.VarChar
+  token_name        String? @db.VarChar
+  address           String? @db.VarChar
+  campaign_id       String? @db.VarChar
+  campaign_name     String? @db.VarChar
+  transaction_hash  String? @db.VarChar
+  block_number      Int?
+  ice_melting_task1 Int     @default(0)
+  ice_melting_task2 Int     @default(0)
+  ice_melting_task3 Int     @default(0)
+
+  @@unique([contract_id, address, token_id], map: "UQ_2abddcf3b296175889751375601")
+  @@index([token_id], map: "IDX_0c867d72a92d2c54ed63383890")
+  @@index([contract_id], map: "IDX_19251b921df2ee37b2ed692bc9")
+  @@index([transaction_hash], map: "IDX_23d1795c1c9dcb6904d243ffc7")
+  @@index([ice_melting_task3], map: "IDX_2516e40a1be218507022d4a33d")
+  @@index([ice_melting_task1], map: "IDX_3cf9739ee4da27304f798fb541")
+  @@index([block_number], map: "IDX_97195202aa06f19f0f87d5ff7d")
+  @@index([ice_melting_task2], map: "IDX_97aabc6f00d599404c92b9bc86")
+  @@index([token_name], map: "IDX_becbfd9e9677771e84057c48e4")
+  @@index([campaign_id], map: "IDX_d4be8dcfd02068e49824b5a94a")
+  @@index([address], map: "IDX_e50a970f9ce0a4f7a42703b187")
+}
+
+model S_Impossible_Finance {
+  id                      String   @id @db.Uuid
+  chain_id                String?  @db.VarChar
+  contract_id             String?  @db.VarChar(255)
+  token_id                String?  @db.VarChar(255)
+  token_symbol            String?  @db.VarChar(255)
+  token_name              String?  @db.VarChar(255)
+  token_uri               String?  @db.VarChar(255)
+  address                 String?  @unique(map: "address_uniques") @db.VarChar(255)
+  campaign_id             String?  @db.VarChar(255)
+  campaign_name           String?  @db.VarChar(255)
+  block_number            BigInt?
+  if_fans_token_threshold Boolean?
+  balance                 Decimal? @db.Decimal(255, 0)
+
+  @@index([address], map: "address_index")
+  @@index([balance], map: "balance")
+  @@index([campaign_name], map: "campaign_name_index")
+  @@index([contract_id], map: "contract_id_index")
+}
+
+model S_Pigeon_Envelope {
+  id                     String  @id(map: "PK_d1810f887f97b1bf0ccdcf2d281") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chain_id               String? @db.VarChar
+  contract_id            String? @db.VarChar
+  token_id               Int?
+  token_symbol           String? @db.VarChar
+  token_uri              String? @db.VarChar
+  token_name             String? @db.VarChar
+  address                String? @db.VarChar
+  campaign_id            String? @db.VarChar
+  campaign_name          String? @db.VarChar
+  transaction_hash       String? @db.VarChar
+  block_number           Int?
+  pigeon_envelope_status Int?
+
+  @@unique([contract_id, address, token_id], map: "UQ_fd0441d5870d373e9960edd763a")
+  @@index([campaign_id], map: "IDX_02f59f7e0412edf67f4d8d3ccf")
+  @@index([block_number], map: "IDX_0fcc6da89461a442d5174c498c")
+  @@index([address], map: "IDX_3acc4d5462710afe5f9142babc")
+  @@index([token_name], map: "IDX_445e9dfa382d6dcdc4127686e7")
+  @@index([token_id], map: "IDX_6d0b8a8a557cc9111124e7bde0")
+  @@index([contract_id], map: "IDX_9b82dabdf564e34d0809ab55ad")
+  @@index([transaction_hash], map: "IDX_abc5c65aca792094a0bdfbc41f")
+  @@index([pigeon_envelope_status], map: "IDX_eb0e1a12b44b00209ac02a72c7")
+}
+
+model S_Pigeon_Envelope_Fantasy {
+  id                     String  @id(map: "PK_c046d26ebdd9be67f1af9525e5a") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chain_id               String? @db.VarChar
+  contract_id            String? @db.VarChar
+  token_id               Int?
+  token_symbol           String? @db.VarChar
+  token_uri              String? @db.VarChar
+  token_name             String? @db.VarChar
+  address                String? @db.VarChar
+  campaign_id            String? @db.VarChar
+  campaign_name          String? @db.VarChar
+  transaction_hash       String? @db.VarChar
+  block_number           Int?
+  pigeon_envelope_status Int?
+  categoryId             String? @db.VarChar
+
+  @@unique([contract_id, address, token_id], map: "UQ_8d878b7cfc4fdc338273d239a77")
+  @@index([campaign_id], map: "IDX_35507f24cd932d7a58e38ce39e")
+  @@index([transaction_hash], map: "IDX_432e5ab779343ae52e503e46a4")
+  @@index([token_id], map: "IDX_54da1d97cc58a717a0675c4f81")
+  @@index([categoryId], map: "IDX_5ac78bc00da0952458de94cb45")
+  @@index([block_number], map: "IDX_7ffbd5490b9d598aef47fa1b33")
+  @@index([contract_id], map: "IDX_87ab213fa72136be0c8a7e3f63")
+  @@index([pigeon_envelope_status], map: "IDX_a41786e3b81d9d4c886e2a0c61")
+  @@index([token_name], map: "IDX_be5af27c2a4ce9fdd17c9806c8")
+  @@index([address], map: "IDX_ee3f4ca4da01b6c907e4acb909")
+}
+
+model S_Sanction {
+  id                String  @id(map: "PK_f3220ae459ca7f58cef9926f299") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chain_id          String? @db.VarChar
+  contract_id       String? @db.VarChar
+  token_id          Int?
+  token_symbol      String? @db.VarChar
+  token_uri         String? @db.VarChar
+  token_name        String? @db.VarChar
+  address           String? @unique(map: "sanction_address_unique") @db.VarChar
+  campaign_id       String? @db.VarChar
+  campaign_name     String? @db.VarChar
+  transaction_hash  String? @db.VarChar
+  transaction_index Int?
+  block_number      Int?
+  block_hash        String? @db.VarChar
+  is_sanction       Int?    @default(1)
+
+  @@index([token_name], map: "IDX_0e938ddefa8493cc09827518c2")
+  @@index([contract_id], map: "IDX_18a04e44ea8cedddc938558c57")
+  @@index([block_number], map: "IDX_442e5fb6ab19138a1e72a97eea")
+  @@index([transaction_hash], map: "IDX_546b3a1092aba79859038e3b9c")
+  @@index([address], map: "IDX_6dab87c3a9538bd6296190db6c")
+  @@index([token_id], map: "IDX_749792cedfe081144275df8ad0")
+  @@index([block_hash], map: "IDX_ac532bf24b7d68f3d2f835e452")
+  @@index([campaign_id], map: "IDX_b015ca7848676c41ae756e8fa1")
+  @@index([is_sanction], map: "IDX_b62c2cca5b6971cfb826fcd9d5")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model addr {
+  addr String   @id(map: "addr_addr_pkey") @db.VarChar
+  ens  String[] @db.VarChar
+  name String?  @db.VarChar
+
+  @@index([ens], type: Gin)
+  @@index([addr], map: "addr_inx")
+  @@index([name])
+}
+
+model addr_bit {
+  addr        String? @db.VarChar(255)
+  account     String? @db.VarChar(255)
+  algorithmId Int?
+  chain       String? @db.VarChar(255)
+  outpoint    String  @id @db.VarChar(255)
+
+  @@index([account], map: "addr_bit_account_index")
+  @@index([addr], map: "addr_bit_addr_index")
+  @@index([algorithmId], map: "algorithmId_index")
+}
+
+model addr_chain {
+  addr        String  @id @db.VarChar(255)
+  algorithmId Int?
+  chain       String? @db.VarChar(255)
+
+  @@index([algorithmId], map: "addr_bit_algorithmId_index")
+  @@index([algorithmId], map: "addr_chain_algorithmId_index")
+}
+
+model addresses {
+  id                           String                @id(map: "PK_745d8f43d3af10ab8247465e450") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  address                      String?               @db.VarChar
+  is_sync_before_transfer      Boolean?              @default(false)
+  bitquery_sync_receiver_count Int?                  @default(0)
+  bitquery_sync_sender_count   Int?                  @default(0)
+  created_at                   DateTime              @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at                   DateTime              @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  chain_id                     String?               @db.Uuid
+  treasury_id                  String?               @db.Uuid
+  tag                          String[]              @db.VarChar
+  childTag                     String[]              @db.VarChar
+  treasuries                   treasuries?           @relation(fields: [treasury_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_43e2b3753f7cdf54cfba3fcbf58")
+  chains                       chains?               @relation(fields: [chain_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d639abfec0a16adcaee7cbe8e2a")
+  addresses_tags_tags          addresses_tags_tags[]
+
+  @@unique([address, chain_id, treasury_id], map: "address_chain_treasury")
+}
+
+model addresses_tags_tags {
+  addressesId String    @db.Uuid
+  tagsId      String    @db.Uuid
+  addresses   addresses @relation(fields: [addressesId], references: [id], onDelete: Cascade, map: "FK_161b9de2ffa008b64a0505840fe")
+  tags        tags      @relation(fields: [tagsId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_a11908dbade7a415ed5c4a793b5")
+
+  @@id([addressesId, tagsId], map: "PK_37d9a25a958d1c99223f1375b4b")
+  @@index([addressesId], map: "IDX_161b9de2ffa008b64a0505840f")
+  @@index([tagsId], map: "IDX_a11908dbade7a415ed5c4a793b")
+}
+
+model avatar {
+  id         Int       @id @default(autoincrement())
+  avatar     String?   @db.VarChar(255)
+  platform   String?   @db.VarChar(255)
+  identity   String?   @db.VarChar(255)
+  created_at DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@unique([avatar, platform, identity], map: "avatar_unique")
+  @@index([avatar], map: "avatar_index")
+  @@index([identity], map: "identity_index")
+  @@index([platform], map: "platform_index")
+}
+
+model binance_request {
+  address String @id @db.VarChar(200)
+}
+
+model bit {
+  account String @id @db.VarChar(255)
+}
+
+model bsc_bab {
+  id                Int     @id(map: "PK_725f10bdac7f53730886cf32946") @default(autoincrement())
+  address           String? @unique(map: "UQ_1a20c3f18a6fea7fde43e238f17") @db.VarChar
+  token_id          String? @db.VarChar
+  block_number      Int?
+  transaction_hash  String? @db.VarChar
+  transaction_index String? @db.VarChar
+  log_index         String? @db.VarChar
+
+  @@index([transaction_hash], map: "IDX_41189588aff02636a6a3ed6373")
+  @@index([token_id], map: "IDX_5988163c80a3012a1467c0ea94")
+  @@index([block_number], map: "IDX_86b80fb6725a485440f9158561")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model bsc_logs {
+  address          String?  @db.VarChar
+  transactionHash  String   @db.VarChar
+  data             String?  @db.VarChar
+  topics           String[] @db.VarChar
+  removed          Boolean?
+  transactionIndex Int?
+  logIndex         Int
+  blockNumber      BigInt?
+  blockHash        String?  @db.VarChar
+
+  @@index([address], map: "bsc_logs_address_index")
+  @@index([blockNumber], map: "bsc_logs_blockNumber_index")
+  @@index([transactionHash], map: "bsc_logs_transactionHash_index")
+  @@ignore
+}
+
+model bsc_spaceid {
+  id               Int       @id(map: "PK_7b36e60c2be4b6173a24c0b82ec") @default(autoincrement())
+  registrant       String?   @db.VarChar
+  owner            String?   @db.VarChar
+  resolver         String?   @db.VarChar
+  resolved_address String?   @db.VarChar
+  name             String?   @db.VarChar
+  node             String?   @db.VarChar
+  namehash         String?   @unique(map: "UQ_f964745e94a4b13fdceee2b9bb8") @db.VarChar
+  label            String?   @db.VarChar
+  labelhash        String?   @db.VarChar
+  expiry_date      BigInt?
+  transaction_hash String?   @db.VarChar
+  block_number     Int?
+  created_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@index([owner], map: "IDX_3288b72a3f712ad165a338e667")
+  @@index([block_number], map: "IDX_3a5f2d3ef78a79ebe15ae83d3d")
+  @@index([registrant], map: "IDX_3cb75daf40edefef289c8b275d")
+  @@index([updated_at], map: "IDX_b52793d8580439587cc90fe224")
+  @@index([node], map: "IDX_d82ad7c1a6ec69930b331500dc")
+  @@index([resolver], map: "IDX_dfdb980e1576a449a31b21775d")
+  @@index([resolved_address], map: "IDX_e45c5bd9f074c24760f53fe64c")
+  @@index([transaction_hash], map: "IDX_e7cd1e1e6612fd899e08309c47")
+  @@index([created_at], map: "IDX_ee3c30841e31748e5310764c33")
+  @@index([namehash], map: "IDX_f964745e94a4b13fdceee2b9bb")
+  @@index([expiry_date], map: "IDX_ff2ff76c8101a9a47a877bd196")
+}
+
+model bsc_spaceidNFT {
+  id               Int       @id(map: "PK_2dfc9b7176193ad3eeb352f8831") @default(autoincrement())
+  token_id         String?   @unique(map: "UQ_7b333fefd9d999f4115cb4b3247") @db.VarChar
+  address          String?   @db.VarChar
+  transaction_hash String?   @db.VarChar
+  block_number     Int?
+  is_mint          Boolean?  @default(true)
+  created_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@index([created_at], map: "IDX_0823ed4d4a4be54051965e1f63")
+  @@index([updated_at], map: "IDX_3763797466161dfd576c28a933")
+  @@index([token_id], map: "IDX_7b333fefd9d999f4115cb4b324")
+  @@index([transaction_hash], map: "IDX_805f1566dd6c7080f33c1f5fa0")
+  @@index([block_number], map: "IDX_843364a3e5b882e91d6be80b3b")
+  @@index([is_mint], map: "IDX_b879bfcf82893e5fff83709766")
+  @@index([address], map: "IDX_f78853aee04f8d3c5ed7a20c49")
+}
+
+model bsc_spaceid_text {
+  id               Int       @id(map: "PK_43a0457c9233dc35135bd076c8d") @default(autoincrement())
+  namehash         String?   @db.VarChar
+  indexedKey       String?   @db.VarChar
+  key              String?   @db.VarChar
+  value            String?   @db.VarChar
+  resolver         String?   @db.VarChar
+  transaction_hash String?   @db.VarChar
+  block_number     Int?
+  created_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@unique([namehash, indexedKey], map: "UQ_cc67204ab0ccea5554edfdb20c4")
+  @@index([created_at], map: "IDX_27942008cade677171e23c122f")
+  @@index([key], map: "IDX_28ed1a989693cc8369f2bb3f75")
+  @@index([resolver], map: "IDX_4b8f8e1e144c21bce5d859d309")
+  @@index([namehash], map: "IDX_8f866794c45c664903e16f934e")
+  @@index([block_number], map: "IDX_a3fb95412e08697b6d33f58fe0")
+  @@index([transaction_hash], map: "IDX_b4d2b475c7a3fb91773d811bfb")
+  @@index([indexedKey], map: "IDX_d807537e595016c5d97618a782")
+  @@index([updated_at], map: "IDX_ed528cc63441c63cdeb84036b3")
+}
+
+model chains {
+  id                 String         @id(map: "PK_f3c6ca7e7ad0f451e3b8f3dd378") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chain_id           String?        @unique(map: "chain_id") @db.VarChar
+  rpc                String?        @db.VarChar
+  name               String?        @db.VarChar
+  created_at         DateTime       @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at         DateTime       @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  coingecko_chain_id String?        @db.VarChar
+  addresses          addresses[]
+  transactions       transactions[]
+}
+
+model coingecko_coins {
+  id        String  @id(map: "PK_907e966cc59a057e34d97d1a640") @db.VarChar
+  name      String? @db.VarChar
+  symbol    String? @db.VarChar
+  platforms Json?
+
+  @@index([name], map: "IDX_322980b616606ee71d22037681")
+  @@index([symbol], map: "IDX_a42868b1cd86bde50bf430bb3e")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model eth_credential {
+  address   String @id @db.Char(50)
+  label     Json?
+  cid       String
+  updatedat Int?
+
+  @@index([label], map: "idx_gin_params_jsonb", type: Gin)
+  @@index([updatedat], map: "idx_updateat_params_int4")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model eth_credential_ens {
+  address   String @id @db.Char(50)
+  label     Json?
+  updatedat Int?
+
+  @@index([label], map: "idx_gin_params_jsonb_ens", type: Gin)
+  @@index([updatedat], map: "idx_updateat_params_int4_ens")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model eth_credential_nft {
+  address   String @id @db.Char(50)
+  label     Json?
+  updatedat Int?
+
+  @@index([label], map: "idx_gin_params_jsonb_nft", type: Gin)
+  @@index([updatedat], map: "idx_updateat_params_int4_nft")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model eth_credential_snapshot {
+  address   String @id @db.Char(50)
+  label     Json?
+  updatedat Int?
+
+  @@index([label], map: "idx_gin_params_jsonb_snapshot", type: Gin)
+  @@index([updatedat], map: "idx_updateat_params_int4_snapshot")
+}
+
+model eth_ens {
+  id               Int     @id(map: "PK_5aa5778dede42c35a13f5005869") @default(autoincrement())
+  owner            String? @db.VarChar
+  resolved_address String? @db.VarChar
+  name             String? @db.VarChar
+  labelName        String? @db.VarChar
+  labelhash        String? @db.VarChar
+  expiry_date      String? @db.VarChar
+  created_at       String? @db.VarChar
+
+  @@index([owner], map: "IDX_3dc983296dd56a538994bd8449")
+  @@index([created_at], map: "IDX_503eb27483fcf6ed5c97482b03")
+  @@index([expiry_date], map: "IDX_93bb6031969e8aebc1636bf841")
+}
+
+model eth_ens_realtime {
+  id               Int       @id(map: "PK_55b069f13dfea2de589f707cefb") @default(autoincrement())
+  owner            String?   @db.VarChar
+  resolved_address String?   @db.VarChar
+  name             String?   @db.VarChar
+  node             String?   @db.VarChar
+  namehash         String?   @unique(map: "UQ_a3f6e396bd21222cf75e15bd25a") @db.VarChar
+  label            String?   @db.VarChar
+  labelhash        String?   @db.VarChar
+  transaction_hash String?   @db.VarChar
+  block_number     Int?
+  is_migrated      Boolean?  @default(false)
+  expiry_date      BigInt?
+  updated_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  created_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@index([is_migrated], map: "IDX_1318ab06351da0a15e4de67cd9")
+  @@index([expiry_date], map: "IDX_49fd2b910094853f9e71296833")
+  @@index([created_at], map: "IDX_4d3dbd8c5745e118c073051a08")
+  @@index([node], map: "IDX_6822dd34c2a516e22344741006")
+  @@index([block_number], map: "IDX_730f2b830d5702a17b75234105")
+  @@index([transaction_hash], map: "IDX_9cdb29c6ef57c3933470d6bd86")
+  @@index([namehash], map: "IDX_a3f6e396bd21222cf75e15bd25")
+  @@index([owner], map: "IDX_a466f5c7128d53467a60970fb2")
+  @@index([updated_at], map: "IDX_abac27b974deedb0d5c1409642")
+  @@index([resolved_address], map: "IDX_d55a1778f175c7bb0a5b1031c7")
+}
+
+model eth_ens_text {
+  id               Int       @id(map: "PK_43ae2622fddb8edb85ce1d9dc7c") @default(autoincrement())
+  namehash         String?   @db.VarChar
+  indexedKey       String?   @db.VarChar
+  key              String?   @db.VarChar
+  value            String?   @db.VarChar
+  resolver         String?   @db.VarChar
+  transaction_hash String?   @db.VarChar
+  block_number     Int?
+  created_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at       DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@unique([namehash, indexedKey], map: "UQ_7e32ab142f8bb55f1542cf67c4c")
+  @@index([namehash], map: "IDX_368ed81162ae24759c47eba518")
+  @@index([block_number], map: "IDX_385256588903985486b7ff9bff")
+  @@index([resolver], map: "IDX_5ca414ec0684a2e055d28533e9")
+  @@index([indexedKey], map: "IDX_8e56f251e2f54165f0b0e8ae09")
+  @@index([transaction_hash], map: "IDX_96113a7d8aa2f80dc65fb4b72e")
+  @@index([updated_at], map: "IDX_d18e4f3af0c3df73b6783a0446")
+  @@index([key], map: "IDX_d6c95909794685124ba6c5d500")
+  @@index([created_at], map: "IDX_e509f5221d6c3f809ae2f01d04")
+}
+
+model events {
+  id       String  @id(map: "events_id_pkey") @db.VarChar
+  imageUrl String? @db.VarChar
+  name     String? @db.VarChar
+
+  @@index([name])
+}
+
+model feature_addresses {
+  properties Json?     @db.Json
+  tag        String[]  @db.VarChar
+  updatedAt  DateTime? @db.Date
+  key        String    @unique(map: "key") @db.VarChar
+  id         Int       @id @default(autoincrement())
+}
+
+model feature_ownership {
+  id        Int       @id @default(autoincrement())
+  contract  String?   @db.VarChar(255)
+  tag       String[]  @db.VarChar
+  updatedAt DateTime? @db.Date
+  key       String?   @db.VarChar(255)
+
+  @@unique([contract, key], map: "key_contract")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model follows {
+  primaryId String @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  from      String @db.VarChar
+  to        String @db.VarChar
+  fromName  String @db.VarChar
+  type      String @default("rss3") @db.VarChar
+
+  @@index([to], map: "IDX_0eb967ead845f5550ba6088c53")
+  @@index([from], map: "IDX_a83c0cd28722b16a4dded86761")
+  @@index([fromName], map: "follow_name_index")
+  @@index([type], map: "follow_type_index")
+  @@ignore
+}
+
+model histories {
+  id                     String   @id(map: "PK_36b0e707452a8b674f9d95da743") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  address                String?  @db.VarChar
+  balance                String?  @db.VarChar
+  balanceExact           String?  @db.VarChar
+  quote_currency         String?  @db.VarChar
+  timestamp              String?  @db.VarChar
+  quote_rate             String?  @db.VarChar
+  contract_name          String?  @db.VarChar
+  contract_decimals      Int?
+  contract_ticker_symbol String?  @db.VarChar
+  contract_address       String?  @db.VarChar
+  chain_id               Int?
+  updated_at             DateTime @db.Timestamp(6)
+  created_at             DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+
+  @@unique([address, timestamp, contract_address], map: "address_contract_timestamp")
+  @@index([timestamp], map: "timestamp")
+}
+
+model if_v3_staking {
+  id        String  @id @db.Char(255)
+  user      String  @db.Char(50)
+  trackid   Int?
+  amount    String?
+  block     String? @db.Char(50)
+  timestamp Int?
+  version   String? @db.Char(50)
+
+  @@index([timestamp], map: "if_v3_timestamp_params_int4")
+}
+
+model if_v3_staking_copy1 {
+  id        String  @id @db.Char(255)
+  user      String  @db.Char(50)
+  trackid   Int?
+  amount    String?
+  block     String? @db.Char(50)
+  timestamp Int?
+  version   String? @db.Char(50)
+
+  @@index([timestamp], map: "if_v3_timestamp_params_int4_copy1")
+}
+
+model impossible_finance_transfer_log {
+  id               String   @id(map: "PK_2496f5cf9eac863e370125759d7") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  address          String?  @db.VarChar
+  name             String?  @db.VarChar
+  decimals         String?  @db.VarChar
+  symbol           String?  @db.VarChar
+  transactionHash  String?  @db.VarChar
+  data             String?  @db.VarChar
+  topics           String?
+  removed          Boolean?
+  transactionIndex Int?
+  logIndex         Int?
+  blockNumber      Int?
+  blockHash        String?  @db.VarChar
+
+  @@unique([transactionHash, logIndex, address], map: "UQ_8db8cc736c6f9f55b682526ca16")
+  @@index([blockNumber], map: "IDX_0db6f91df1a129b8e125b60a8c")
+}
+
+model mails {
+  id         String   @id(map: "PK_218248d7dfe1b739f06e2309349") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  from       String?  @db.VarChar
+  to         String?  @db.VarChar
+  body       String?  @db.VarChar
+  created_at DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+}
+
+model next_id_log {
+  id                Int     @id(map: "PK_b7b0268f864e31d13aeb3302abf")
+  avatar            String? @db.VarChar
+  action            String? @db.VarChar
+  platform          String? @db.VarChar
+  identity          String? @db.VarChar
+  proof_location    String? @db.VarChar
+  created_at        String? @db.VarChar
+  signature         String? @db.VarChar
+  signature_payload String? @db.VarChar
+  extra             String? @db.VarChar
+  uuid              String? @db.VarChar
+  arweave_id        String? @db.VarChar
+
+  @@index([platform], map: "IDX_8e35a3ea8708af4d81d890d660")
+  @@index([identity], map: "IDX_9abfb07d0ee79795746c94ee66")
+  @@index([action], map: "IDX_b66924d0baf8aa2e2e34d53bd6")
+  @@index([avatar], map: "IDX_d8ab42cc253938c6dc30b13306")
+}
+
+model nft {
+  id                  Int     @id(map: "PK_8f46897c58e23b0e7bf6c8e56b0") @default(autoincrement())
+  token_address       String  @db.VarChar
+  token_id            String  @db.VarChar
+  block_number_minted String? @db.VarChar
+  owner_of            String  @db.VarChar
+  block_number        String? @db.VarChar
+  amount              String? @db.VarChar
+  contract_type       String? @db.VarChar
+  name                String? @db.VarChar
+  symbol              String? @db.VarChar
+  token_uri           String? @db.VarChar
+  metadata            String? @db.VarChar
+
+  @@unique([token_address, token_id, owner_of], map: "UQ_dec84c7e0a8a6f0095a5f352a2f")
+  @@index([token_address], map: "IDX_c79c45ac034aff8d41677b285f")
+  @@index([owner_of], map: "IDX_dee3f9e6e8d2013c19b9e5d9e4")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model nft_hold {
+  address  String   @db.VarChar
+  contract String   @db.VarChar
+  count    Decimal? @db.Decimal(100, 0)
+
+  @@id([address, contract])
+  @@index([contract])
+}
+
+model nft_token_hold_rt {
+  dt         String   @db.VarChar
+  token_type String   @db.VarChar
+  address    String   @db.VarChar
+  contract   String   @db.VarChar
+  count      Decimal? @db.Decimal(100, 0)
+  is_active  String?  @default("1") @db.VarChar(5)
+
+  @@id([address, token_type, contract, dt])
+  @@index([address])
+  @@index([contract])
+  @@index([dt, token_type])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model nfts {
+  contract         String    @id @db.VarChar
+  description      String?   @db.VarChar
+  externalUrl      String?   @db.VarChar
+  imageUrl         String?   @db.VarChar
+  name             String?   @db.VarChar
+  network          String?   @db.VarChar
+  primaryInterface String?   @db.VarChar
+  symbol           String?   @db.VarChar
+  createat         DateTime? @default(now()) @db.Timestamp(6)
+  updateat         DateTime? @db.Timestamp(6)
+  source           String[]  @db.VarChar
+
+  @@index([name])
+  @@index([network])
+  @@index([source], type: Gin)
+  @@index([symbol])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model nfts_info {
+  contract         String    @db.VarChar
+  description      String?   @db.VarChar
+  externalurl      String?   @db.VarChar
+  imageurl         String?   @db.VarChar
+  name             String?   @db.VarChar
+  network          String    @db.VarChar
+  primaryInterface String?   @db.VarChar
+  symbol           String?   @db.VarChar
+  createat         DateTime? @default(now()) @db.Timestamp(6)
+  updateat         DateTime? @default(now()) @db.Timestamp(6)
+
+  @@id([contract, network])
+  @@index([name])
+  @@index([network])
+  @@index([symbol])
+}
+
+model nfts_price {
+  id            String    @id(map: "PK_a35bcc5a02a51c999636f0754b5") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name          String    @db.VarChar
+  address       String    @db.VarChar
+  chain         String    @db.VarChar
+  image_url     String    @db.VarChar
+  type          String    @db.VarChar
+  min_price_ETH Decimal?  @db.Decimal
+  createdAt     DateTime? @db.Timestamp(6)
+
+  @@index([createdAt], map: "IDX_1481235d854965334fdc034f6a")
+  @@index([address], map: "IDX_33639221f614c28b86780611f0")
+  @@index([name], map: "IDX_fb5613829233ec12b42d8ffc5b")
+  @@index([chain], map: "IDX_fe98295ac892c2ea2de6d316bb")
+}
+
+model notifications {
+  id         String   @id(map: "PK_6a72c3c0f683f6462415e653c3a") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  content    String?
+  hash       String?  @unique(map: "hash") @db.VarChar
+  created_at DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model poap {
+  id      BigInt  @default(autoincrement())
+  addr    String? @db.VarChar
+  eventId String? @db.VarChar
+
+  @@unique([addr, eventId], map: "addr_eventId")
+  @@index([addr])
+  @@index([eventId])
+  @@ignore
+}
+
+model polygon_lens_collect {
+  id                Int     @id(map: "PK_7d407c24c43535eb4029f61c950") @default(autoincrement())
+  collector         String? @db.VarChar
+  referral          String? @db.VarChar
+  profileId         BigInt?
+  pubId             Int?
+  rootProfileId     BigInt?
+  rootPubId         Int?
+  collectModuleData String?
+  timestamp         Int?
+  transactionHash   String? @db.VarChar
+  transactionIndex  String? @db.VarChar
+  logIndex          Int?
+  blockNumber       Int?
+
+  @@unique([transactionHash, logIndex], map: "UQ_bd7051c1920ef3b34a5123ed5e3")
+  @@index([timestamp], map: "IDX_25a487450f2ac89f0b00f6a598")
+  @@index([collector], map: "IDX_39bc192f79420be3d1bc8c9a1b")
+  @@index([profileId], map: "IDX_4a7ef16756fd867b3f9bb8f1bc")
+  @@index([pubId], map: "IDX_5357d26e9bc6829e790a5c56ad")
+  @@index([transactionHash], map: "IDX_6ca32553cd32711828408e8d57")
+  @@index([blockNumber], map: "IDX_7a173b441426761eb3008c71ef")
+  @@index([rootPubId], map: "IDX_b8e202604782e52f25aeb3b0aa")
+  @@index([logIndex], map: "IDX_d7c0ab559f634507482bd246cb")
+  @@index([referral], map: "IDX_d8acbf66808a1ec4f65d0419f9")
+  @@index([transactionIndex], map: "IDX_ec1938e9987aa8a060a1d413c2")
+  @@index([rootProfileId], map: "IDX_f0424fd7b05183ff8d5f6da464")
+}
+
+model polygon_lens_collectNFT {
+  id              Int      @id(map: "PK_55a4202ad5873e32f100ac26951") @default(autoincrement())
+  profileId       BigInt?
+  pubId           Int?
+  collectNFTId    Int?
+  address         String?  @db.VarChar
+  timestamp       Int?
+  transactionHash String?  @db.VarChar
+  blockNumber     Int?
+  isMint          Boolean? @default(true)
+
+  @@unique([profileId, pubId, collectNFTId], map: "UQ_828da2af80996d2c4ca8d36ffb1")
+  @@index([isMint], map: "IDX_092e15e1066c8ffe509dbc9d5c")
+  @@index([collectNFTId], map: "IDX_2e1f571125e0814d15e146f783")
+  @@index([timestamp], map: "IDX_4d1a4037f432c411e19b02d339")
+  @@index([pubId], map: "IDX_54ab4e5cb594f33e72603ca3a7")
+  @@index([transactionHash], map: "IDX_6d1417708b86a038bf5e732a84")
+  @@index([blockNumber], map: "IDX_8a9c65f9ce982fb075ae7e0dc3")
+  @@index([profileId], map: "IDX_c8f172a33ef071b4a74a2f69f3")
+  @@index([address], map: "IDX_d0036926618323f1cb91ecc340")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model polygon_lens_collect_fee_detail {
+  collector      String? @db.VarChar
+  pub_type       String? @db.VarChar
+  pro_id         Int
+  pub_id         Int
+  root_pro_id    Int
+  root_pub_id    Int
+  fee_type       Int?
+  recipient_type Int?
+  blk_num        Int
+  hash           String  @db.VarChar
+  log_idx        Int
+  idx            Int
+  mirr_addr      String? @db.VarChar
+  timestamp      Int?
+  amount         Float?
+  currency       String? @db.VarChar
+  referralFee    Int?
+  origin_addr    String? @db.VarChar
+  decimals       Int?
+  pform_addr     String? @db.VarChar
+  pform_rate     Int?
+  plt_amount     Float?
+  mirr_amount    Float?
+  origin_amount  Float?
+
+  @@id([pro_id, hash, log_idx])
+  @@index([collector])
+  @@index([fee_type])
+  @@index([mirr_addr])
+  @@index([origin_addr])
+  @@index([pform_addr])
+  @@index([pro_id])
+  @@index([pub_id])
+  @@index([pub_type])
+  @@index([recipient_type])
+  @@index([root_pro_id])
+  @@index([root_pub_id])
+  @@index([timestamp])
+}
+
+model polygon_lens_currency {
+  id               Int      @id(map: "PK_d9bc6b99c92ec96a3d7ca29e5e7") @default(autoincrement())
+  currency         String?  @db.VarChar
+  symbol           String?  @db.VarChar
+  decimals         Int?
+  prevWhitelisted  Boolean?
+  whitelisted      Boolean?
+  timestamp        Int?
+  transactionHash  String?  @db.VarChar
+  transactionIndex String?  @db.VarChar
+  logIndex         Int?
+  blockNumber      Int?
+
+  @@unique([transactionHash, logIndex], map: "UQ_f7ee19bf8d9e7868265fe31b2ce")
+  @@index([logIndex], map: "IDX_14e13e1f51f3f4b1fd90c4e523")
+  @@index([transactionHash], map: "IDX_347d33b2189f192b8282acd715")
+  @@index([currency], map: "IDX_791b0c7c89dc540b7cf93b7426")
+  @@index([whitelisted], map: "IDX_81a6528501829f1e288fd02510")
+  @@index([transactionIndex], map: "IDX_8b9807df2387f22d7e87c9e001")
+  @@index([timestamp], map: "IDX_9610d79cc6901699a859730e09")
+  @@index([symbol], map: "IDX_a84dbd1434650e435aad569795")
+  @@index([blockNumber], map: "IDX_ae41d47c6b8bfc2ece431fd889")
+  @@index([prevWhitelisted], map: "IDX_e565f0a5d1c42bf5cd6c6186cd")
+  @@index([decimals], map: "IDX_f02c9bcaeeb0db44b63a521312")
+}
+
+model polygon_lens_follow {
+  id               Int     @id(map: "PK_3da5450ca41af96e0bddd3ad727") @default(autoincrement())
+  follower         String? @db.VarChar
+  profileId        BigInt?
+  followModuleData String?
+  timestamp        Int?
+  transactionHash  String? @db.VarChar
+  logIndex         Int?
+  blockNumber      Int?
+
+  @@unique([follower, profileId], map: "UQ_dfe85555cb6d00fd4f01b69125a")
+  @@index([logIndex], map: "IDX_1baadfcfaf35ba7253b07e4a3b")
+  @@index([profileId], map: "IDX_853226042abb9cd3de73308d59")
+  @@index([follower], map: "IDX_8f53db96ed5108867dd0aacdca")
+  @@index([transactionHash], map: "IDX_c265ea7f02526e5b902acfa526")
+  @@index([blockNumber], map: "IDX_d60d797bb2a080b68e8b077ddb")
+  @@index([timestamp], map: "IDX_f251fce91d6009b1f7e950a843")
+}
+
+model polygon_lens_followNFT {
+  id              Int      @id(map: "PK_540111f72e2c8cb11a09793c715") @default(autoincrement())
+  profileId       BigInt?
+  followNFTId     Int?
+  address         String?  @db.VarChar
+  timestamp       Int?
+  transactionHash String?  @db.VarChar
+  blockNumber     Int?
+  isMint          Boolean? @default(true)
+
+  @@unique([profileId, followNFTId], map: "UQ_e5cdb00f7e34a6d4eec1d7c059a")
+  @@index([timestamp], map: "IDX_1709838492cccbcb391ab8a460")
+  @@index([followNFTId], map: "IDX_2e8371e4e34a91e2d0f52119f5")
+  @@index([blockNumber], map: "IDX_53a0396114369a53d5b8a2739c")
+  @@index([transactionHash], map: "IDX_57bbbc6d4e6000c3e216d97a0b")
+  @@index([profileId], map: "IDX_5d16cf80f3f436e797e28f2545")
+  @@index([address], map: "IDX_b48225bd48ab22d3a10708c664")
+  @@index([isMint], map: "IDX_c18dca501a40ca0aaa0f82072f")
+}
+
+model polygon_lens_followNFTContract {
+  id              Int     @id(map: "PK_0277a3aa8c88d819721caca4801") @default(autoincrement())
+  profileId       BigInt?
+  followNFT       String? @unique(map: "UQ_9663df3817cfadde6dde4bc9bb6") @db.VarChar
+  timestamp       Int?
+  transactionHash String? @db.VarChar
+  blockNumber     Int?
+
+  @@index([blockNumber], map: "IDX_039476af5ca8080a08a415609e")
+  @@index([transactionHash], map: "IDX_32ae16df5a98f13139e502b025")
+  @@index([followNFT], map: "IDX_9663df3817cfadde6dde4bc9bb")
+  @@index([profileId], map: "IDX_b33789893719698b5cb1681107")
+  @@index([timestamp], map: "IDX_cde117b3f3adc85c2fa559c4e4")
+}
+
+model polygon_lens_log {
+  id               Int     @id(map: "PK_8d86884cb7c7cd263a5f14aea02") @default(autoincrement())
+  address          String? @db.VarChar
+  topics           String?
+  logIndex         Int?
+  transactionHash  String? @db.VarChar
+  transactionIndex Int?
+  blockNumber      Int?
+  data             String?
+
+  @@unique([transactionHash, logIndex], map: "UQ_774600e2521266d5e52d27adc70")
+  @@index([transactionHash], map: "IDX_245a8dc385e202e7628eb9a3c0")
+  @@index([blockNumber], map: "IDX_6cf4f8bdaa9e546cdd1a323b8b")
+  @@index([topics], map: "IDX_959c6d35a72484f5908482f915")
+  @@index([logIndex], map: "IDX_ad0600b85c7040dcf19fbf47c2")
+  @@index([transactionIndex], map: "IDX_d67e932d098e592baa821454ec")
+}
+
+model polygon_lens_pagerank {
+  address  String   @id @db.VarChar
+  pr_value Decimal? @db.Decimal(7, 6)
+}
+
+model polygon_lens_pagerank_new {
+  node     String   @id @db.VarChar(200)
+  pr_value Decimal? @db.Decimal(7, 6)
+  nodetype String?  @db.VarChar(100)
+  pr_rank  BigInt?
+}
+
+model polygon_lens_profile {
+  id                     Int     @id(map: "PK_552491b02b9ee97dbc165e900ea") @default(autoincrement())
+  profileId              BigInt? @unique(map: "UQ_9462ec1d02490eed73f368a3e99")
+  creator                String? @db.VarChar
+  dispatcher             String? @db.VarChar
+  to                     String? @db.VarChar
+  handle                 String? @db.VarChar
+  imageURI               String?
+  followModule           String? @db.VarChar
+  followModuleReturnData String?
+  followNFTURI           String?
+  metadata               String?
+  timestamp              Int?
+  transactionHash        String? @db.VarChar
+  blockNumber            Int?
+
+  @@index([dispatcher], map: "IDX_3b06e12a652891c40db162cd40")
+  @@index([timestamp], map: "IDX_771a259926fa71d756dd2e658a")
+  @@index([creator], map: "IDX_8d1c21dc495ac5e67c14b31901")
+  @@index([transactionHash], map: "IDX_8d98d44f40dc537731ddf9bb81")
+  @@index([blockNumber], map: "IDX_a673943f134804f0e9b049ff7b")
+  @@index([handle], map: "IDX_ace5c2c807a1732c8f17754347")
+  @@index([to], map: "IDX_f642192dee92b48ca87b102455")
+}
+
+model polygon_lens_profileNFT {
+  id              Int      @id(map: "PK_6bea4b687603071ea419a57bfcb") @default(autoincrement())
+  profileId       BigInt?
+  profileNFTId    Int?     @unique(map: "UQ_4b3014e1c80fd5d9c4ba269a36d")
+  address         String?  @db.VarChar
+  timestamp       Int?
+  transactionHash String?  @db.VarChar
+  blockNumber     Int?
+  isMint          Boolean? @default(true)
+
+  @@index([isMint], map: "IDX_073a347d613b2e94f2b6d0b808")
+  @@index([transactionHash], map: "IDX_483b649930457faff96cbd61c9")
+  @@index([profileNFTId], map: "IDX_4b3014e1c80fd5d9c4ba269a36")
+  @@index([timestamp], map: "IDX_690d4ffe8e37419f564d416f0a")
+  @@index([blockNumber], map: "IDX_b1d943d4a6d8500d34e8a29114")
+  @@index([profileId], map: "IDX_cf936d7c129759708686784410")
+  @@index([address], map: "IDX_e71038ebc83ca5c655ad857e48")
+}
+
+model polygon_lens_publication {
+  id                        Int     @id(map: "PK_e2361d89d138d16344dcb6b4792") @default(autoincrement())
+  profileId                 BigInt?
+  pubId                     Int?
+  contentURI                String?
+  profileIdPointed          BigInt?
+  pubIdPointed              Int?
+  referenceModuleData       String?
+  collectModule             String? @db.VarChar
+  collectModuleReturnData   String?
+  referenceModule           String? @db.VarChar
+  referenceModuleReturnData String?
+  type                      String? @db.VarChar
+  timestamp                 Int?
+  transactionHash           String? @db.VarChar
+  blockNumber               Int?
+
+  @@unique([profileId, pubId], map: "UQ_2495eaf75f154e2a9f9908d7469")
+  @@index([profileId], map: "IDX_03c5f5e993f3e39c400d8740fc")
+  @@index([transactionHash], map: "IDX_3314a3bc2c4cd053035aa64e93")
+  @@index([blockNumber], map: "IDX_427d6b9ca082b8e4eda2e6c662")
+  @@index([profileIdPointed], map: "IDX_7205bffb26272c19cdfb6c4c61")
+  @@index([pubIdPointed], map: "IDX_a5dd7d977db623ffd38d98e67b")
+  @@index([timestamp], map: "IDX_ecd346b148534c531e059d1c0c")
+  @@index([pubId], map: "IDX_f4fa550f1124692765b7d2d16b")
+}
+
+model polygon_lens_treasury {
+  id               Int     @id(map: "PK_b1589f18761b58ec6583652c204") @default(autoincrement())
+  prevTreasury     String? @db.VarChar
+  newTreasury      String? @db.VarChar
+  timestamp        Int?
+  transactionHash  String? @db.VarChar
+  transactionIndex String? @db.VarChar
+  logIndex         Int?
+  blockNumber      Int?
+
+  @@unique([transactionHash, logIndex], map: "UQ_7cc84951381807fceabf254d57c")
+  @@index([logIndex], map: "IDX_21786d61ae629e5a083810b4c3")
+  @@index([prevTreasury], map: "IDX_2edd886930d7efbfc3e6b225e0")
+  @@index([blockNumber], map: "IDX_3ea68f14d69b8c2b67e93772d6")
+  @@index([transactionHash], map: "IDX_7fdab269ca11f32a18c2a70e04")
+  @@index([newTreasury], map: "IDX_e396d2e160b3f3915b6a958e2e")
+  @@index([timestamp], map: "IDX_e536e4f7cd9e937e356a0f291e")
+  @@index([transactionIndex], map: "IDX_ec9845f8a647c3ea20705aaa7e")
+}
+
+model polygon_lens_treasury_fee {
+  id               Int     @id(map: "PK_04088a512f2ea9d815fa9a39b1e") @default(autoincrement())
+  prevTreasuryFee  String? @db.VarChar
+  newTreasuryFee   String? @db.VarChar
+  timestamp        Int?
+  transactionHash  String? @db.VarChar
+  transactionIndex String? @db.VarChar
+  logIndex         Int?
+  blockNumber      Int?
+
+  @@unique([transactionHash, logIndex], map: "UQ_c51d3ddb9f9c124c186db75a09b")
+  @@index([transactionHash], map: "IDX_0d5b9e83c50695ff3a984292b4")
+  @@index([logIndex], map: "IDX_4050540ff5bd8c43be8bbcef97")
+  @@index([timestamp], map: "IDX_a9f96e4932a32e3bba7a0fd58d")
+  @@index([blockNumber], map: "IDX_c7d2f2084222e0e69a67fd22c0")
+  @@index([transactionIndex], map: "IDX_d5ff11160684cfe8166f640181")
+  @@index([newTreasuryFee], map: "IDX_e9ea1f69d8a8cb43565e62eaab")
+  @@index([prevTreasuryFee], map: "IDX_f25c68acc78c57b229d0a0c2d5")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model polygon_nft_hold {
+  address  String   @db.VarChar
+  contract String   @db.VarChar
+  count    Decimal? @db.Decimal(100, 0)
+
+  @@id([address, contract])
+  @@index([contract])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model polygon_nft_token_hold_rt {
+  dt         String   @db.VarChar
+  token_type String   @db.VarChar
+  address    String   @db.VarChar
+  contract   String   @db.VarChar
+  count      Decimal? @db.Decimal(100, 0)
+  is_active  String?  @default("1") @db.VarChar(5)
+
+  @@id([address, token_type, contract, dt])
+  @@index([address])
+  @@index([contract])
+  @@index([dt, token_type])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model polygon_token_hold {
+  contract String   @db.VarChar
+  address  String   @db.VarChar
+  count    Decimal? @db.Decimal(100, 0)
+
+  @@id([address, contract])
+  @@index([contract], map: "idx_polygon_token_hold_contract")
+  @@index([contract])
+}
+
+model prices {
+  id         String   @id(map: "PK_2e40b9e4e631a53cd514d82ccd2") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name       String   @db.VarChar
+  symbol     String   @db.VarChar
+  address    String   @db.VarChar
+  chain      String   @db.VarChar
+  type       String   @db.VarChar
+  price_ETH  Decimal? @db.Decimal
+  price_USDT Decimal? @db.Decimal
+  createdAt  DateTime @db.Timestamp(6)
+
+  @@index([name], map: "IDX_41f394f0c4e8e7e2324df1f759")
+  @@index([symbol], map: "IDX_5c60132c8a9f3690b018aed6fb")
+  @@index([createdAt], map: "IDX_6ad881d4d62c5a5491bbe460af")
+  @@index([address], map: "IDX_c9df8fdc9340227b343ea8fa7f")
+  @@index([chain], map: "IDX_e207bc170e3e3659d753f0761e")
+}
+
+model proposal {
+  id      String  @id(map: "proposal_p_pkey") @db.VarChar
+  spaceId String  @db.VarChar
+  title   String? @db.VarChar
+
+  @@index([spaceId], map: "proposal_index_space")
+  @@index([title], map: "title_index_space")
+}
+
+model space {
+  id     String  @id(map: "space_p_pkey") @db.VarChar
+  avatar String? @db.VarChar
+  name   String? @db.VarChar
+
+  @@index([name], map: "space_index_name")
+}
+
+model tags {
+  id                  String                @id(map: "PK_e7dc17249a1148a1970748eda99") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  parentId            String?               @db.VarChar
+  tag                 String                @db.VarChar
+  addresses_tags_tags addresses_tags_tags[]
+
+  @@unique([parentId, tag], map: "IDX_0df749a0f61390a115d279eb90")
+  @@index([parentId], map: "IDX_9f9590cc11561f1f48ff034ef9")
+  @@index([tag], map: "IDX_db66121dc39534bfc85341711d")
+}
+
+model telegram {
+  id               String   @id(map: "PK_2db8c5fd44d5a77259aadc814b6") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  oriMsg           String   @db.VarChar
+  fromName         String   @db.VarChar
+  fromAddress      String   @db.VarChar
+  fromTokenAddress String   @db.VarChar
+  currency         String   @db.VarChar
+  toName           String   @db.VarChar
+  toAddress        String   @db.VarChar
+  toTokenAddress   String   @db.VarChar
+  etherscan        String
+  createdAt        DateTime @db.Timestamp(6)
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model token_hold {
+  contract String   @db.VarChar
+  address  String   @db.VarChar
+  count    Decimal? @db.Decimal(100, 0)
+
+  @@id([address, contract])
+  @@index([contract])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model token_hold_test {
+  contract String   @db.VarChar
+  address  String   @db.VarChar
+  count    Decimal? @db.Decimal(100, 0)
+
+  @@ignore
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model tokens {
+  contract String    @id @db.VarChar
+  name     String?   @db.VarChar
+  symbol   String?   @db.VarChar
+  decimal  Decimal?  @db.Decimal
+  createat DateTime? @default(now()) @db.Timestamp(6)
+  updateat DateTime? @db.Timestamp(6)
+  source   String[]  @db.VarChar
+  decimals Decimal?  @db.Decimal
+  network  String?   @db.VarChar(10)
+
+  @@index([name])
+  @@index([network])
+  @@index([source], type: Gin)
+  @@index([symbol])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model tokens_info {
+  contract String    @db.VarChar
+  name     String?   @db.VarChar
+  symbol   String?   @db.VarChar
+  decimal  Decimal?  @db.Decimal
+  decimals Decimal?  @db.Decimal
+  network  String    @db.VarChar
+  createat DateTime? @default(now()) @db.Timestamp(6)
+  updateat DateTime? @default(now()) @db.Timestamp(6)
+
+  @@id([contract, network])
+  @@index([name])
+  @@index([network])
+  @@index([symbol])
+}
+
+model tokens_price {
+  id         String   @id(map: "PK_8bd39bbe01d3d4ee53965be88ec") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name       String   @db.VarChar
+  symbol     String   @db.VarChar
+  address    String   @db.VarChar
+  chain      String   @db.VarChar
+  type       String   @db.VarChar
+  price_ETH  Decimal? @db.Decimal
+  price_USDT Decimal? @db.Decimal
+  createdAt  DateTime @db.Timestamp(6)
+
+  @@index([name], map: "IDX_040451944a2d6158a1a93e678f")
+  @@index([createdAt], map: "IDX_253a3ff7975c4cf62660323ed5")
+  @@index([symbol], map: "IDX_2f18ad04067e3d7970a223c714")
+  @@index([address], map: "IDX_532b03c2fe3a724822ead6f29a")
+  @@index([chain], map: "IDX_797f13ae597b2408ee03ee8e4f")
+}
+
+model transactions {
+  id           String   @id(map: "PK_a219afd8dd77ed80f5a862f1db9") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  tx_hash      String?  @unique(map: "tx_hash") @db.VarChar
+  from         String?  @db.VarChar
+  to           String?  @db.VarChar
+  value        String?  @db.VarChar
+  block_number Int?
+  block_hash   String?  @db.VarChar
+  tx_index     String?  @db.VarChar
+  gas          String?  @db.VarChar
+  gas_price    String?  @db.VarChar
+  timestamp    String?  @db.VarChar
+  created_at   DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at   DateTime @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  chain_id     String?  @db.Uuid
+  chains       chains?  @relation(fields: [chain_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_6a0aa3e0ce6043beef823ce849c")
+
+  @@index([tx_hash], map: "IDX_0deaa0ee5092d45fac99139de7")
+}
+
+model treasuries {
+  id                    String      @id(map: "PK_6d41702e8cbb474881e821b378c") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name                  String?     @unique(map: "name") @db.VarChar
+  logo                  String?     @db.VarChar
+  website               String?     @db.VarChar
+  native_token_name     String?     @db.VarChar
+  native_token_symbol   String?     @db.VarChar
+  native_token_contract String?     @db.VarChar
+  created_at            DateTime    @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at            DateTime    @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  addresses             addresses[]
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model twitter_follower {
+  id           String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  following_id String?   @db.VarChar
+  user_id      String?   @db.VarChar
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([following_id], map: "twitter_follower_following_id_index")
+  @@index([user_id], map: "twitter_follower_user_id_index")
+  @@ignore
+}
+
+model twitter_follower_copy {
+  id           String    @id(map: "twitter_follow_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  following_id String?   @db.VarChar
+  user_id      String?   @db.VarChar
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@unique([user_id, following_id], map: "user_follower_unique")
+  @@index([following_id], map: "following_id_index")
+  @@index([user_id], map: "user_id_index")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model twitter_user {
+  name            String?   @db.VarChar(255)
+  id              String    @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime? @default(now()) @db.Timestamptz(6)
+  name_id         String?   @db.VarChar(255)
+  is_sync         Boolean?  @default(false)
+  is_exist        Boolean?  @default(true)
+  avatar          String?   @db.VarChar(255)
+  address         String?   @db.VarChar(255)
+  following_count Int?      @default(0)
+  followers_count Int?      @default(0)
+  is_network      String?   @default(dbgenerated("0")) @db.VarChar(255)
+
+  @@index([address], map: "twitter_user_address_index")
+  @@index([is_exist], map: "twitter_user_is_exist_index")
+  @@index([is_network], map: "twitter_user_is_network_index")
+  @@index([is_sync], map: "twitter_user_is_sync_index")
+  @@index([name_id], map: "twitter_user_name_id_index")
+  @@ignore
+}
+
+model twitter_user_copy {
+  name            String?   @db.VarChar(255)
+  id              String    @id(map: "twitter_user_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime? @default(now()) @db.Timestamptz(6)
+  name_id         String?   @unique(map: "name_id_unique") @db.VarChar(255)
+  is_sync         Boolean?  @default(false)
+  is_exist        Boolean?  @default(true)
+  avatar          String?   @db.VarChar(255)
+  address         String?   @db.VarChar(255)
+  following_count Int?      @default(0)
+  followers_count Int?      @default(0)
+  is_network      String?   @default(dbgenerated("0")) @db.VarChar(255)
+
+  @@index([is_exist], map: "is_exist_index")
+  @@index([is_network], map: "is_network_index")
+  @@index([is_sync], map: "is_sync_index")
+  @@index([name_id], map: "name_id_index")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model twitters {
+  uid    String  @id(map: "twitters_uid_pkey") @db.VarChar
+  handle String? @db.VarChar
+  name   String? @db.VarChar
+
+  @@index([handle], map: "IDX_e9e0ae6bc4a43eb89b83927263")
+  @@index([uid], map: "IDX_ece65686b587537801ab3f5428")
+  @@index([name], map: "IDX_twitters_name")
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model twitters_relations {
+  uid     String @db.VarChar
+  subject String @db.VarChar
+  type    String @db.VarChar
+
+  @@unique([uid, subject, type], map: "uk_twitters_relations_unique")
+  @@index([uid], map: "IDX_twitters_relations_type")
+  @@index([uid], map: "IDX_twitters_relations_uid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model typeorm_metadata {
+  type     String  @db.VarChar
+  database String? @db.VarChar
+  schema   String? @db.VarChar
+  table    String? @db.VarChar
+  name     String? @db.VarChar
+  value    String?
+
+  @@ignore
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model vote {
+  address  String    @db.VarChar
+  spaceId  String    @db.VarChar
+  count    BigInt?
+  updateat DateTime? @db.Timestamp(6)
+
+  @@unique([address, spaceId], map: "vote_unique")
+  @@index([spaceId], map: "IDX_vote_spaceId")
+}
+
+model whales {
+  block_hash        String?   @db.VarChar(255)
+  block_number      BigInt?
+  from              String?   @db.VarChar(255)
+  to                String?   @db.VarChar(255)
+  hash              String?   @db.VarChar(255)
+  transaction_index String?   @db.VarChar(255)
+  value             String?   @db.VarChar(255)
+  transaction_type  String?   @db.VarChar(255)
+  log_index         String?   @default(dbgenerated("0")) @db.VarChar(255)
+  contract_address  String?   @db.VarChar(255)
+  id                String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  status            String?   @default(dbgenerated("0")) @db.VarChar(255)
+  created_at        DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  updated_at        DateTime? @default(dbgenerated("('now'::text)::timestamp(6) with time zone")) @db.Timestamp(6)
+  nonce             String?   @db.VarChar
+  price_usd         String?   @db.VarChar
+  value_exact       String?   @db.VarChar
+
+  @@unique([hash, log_index], map: "hash_log")
+  @@index([block_number], map: "index_block_number")
+  @@index([from, nonce], map: "index_from_nonce")
+  @@index([hash], map: "index_hash")
+  @@index([hash, log_index], map: "index_hash_log_index")
+  @@index([status, log_index], map: "index_status_log_index")
+}
