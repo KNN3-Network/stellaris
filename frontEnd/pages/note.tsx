@@ -14,6 +14,7 @@ import P5 from '../statics/p5.svg'
 import P6 from '../statics/p6.svg'
 import P7 from '../statics/p7.svg'
 import P8 from '../statics/p8.svg'
+import P9 from '../statics/Crux_token.png'
 import HeadImg from '../statics/head.svg'
 import { useAddressList, loginAccountState } from "../store/state";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -22,6 +23,7 @@ import { useRouter } from "next/router";
 import { shortenAddr } from './../lib/tool'
 // const inter = Inter({ subsets: ['latin'] })
 import Step from '../components/Step'
+import BotGif from './../components/BotGif'
 
 const selectTab = [{
   name: 'Hold a BABT',
@@ -93,6 +95,14 @@ export default function Home() {
                 alt=""
               />
               <span>{shortenAddr(loginAccount)}</span>
+              <div className="ml-[auto] flex items-center justify-center">
+                <div>CRUX  ADDRESS</div>
+                <Image
+                  className="ml-4 w-[40px] h-[40px]"
+                  src={P9}
+                  alt=""
+                />
+              </div>
             </div>
           </div>
 
@@ -182,9 +192,11 @@ export default function Home() {
         </div>
       }
 
-      <div className="absolute bottom-[40px] left-[50%] translate-x-[-50%] w-full flex items-center justify-center">
+      <div className="absolute bottom-[60px] left-[50%] translate-x-[-50%] w-full flex items-center justify-center">
         <Step num={4} />
       </div>
+
+      <BotGif/>
     </div>
   )
 }

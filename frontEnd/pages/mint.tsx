@@ -1,15 +1,16 @@
 
 import React, { useState, useEffect } from "react";
-import Image from 'next/image'
 import { useAddressList, loginAccountState, conditionState } from "../store/state";
 import HeadImg from '../statics/head.svg'
 import { shortenAddr } from './../lib/tool'
 import Step from '../components/Step'
 import { starkNetContract } from './../config'
 import api from './../api'
-import { connect, WalletProvider } from "@argent/get-starknet"
+import { connect } from "get-starknet"
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import Image from 'next/image'
+import BotGif from './../components/BotGif'
 
 export default function Home() {
   const router = useRouter();
@@ -29,14 +30,29 @@ export default function Home() {
     if (res && res.r && res.s) {
 
       const starknetX: any = await connect()
-
+ 
       if (!starknetX) {
         toast.info("User rejected wallet selection or silent connect found nothing")
+        return
       }
 
       await starknetX.enable()
 
       if (starknetX.isConnected) {
+
+        if(starknetX.id === 'argentX'){
+          if(starknetX.chainId !== 'SN_GOERLI'){
+            toast.error('Switch your wallet to the Testnet!')
+            return false
+          }
+        }
+  
+        if (starknetX.id === 'braavos') {
+          if (starknetX.account.baseUrl !== 'https://alpha4.starknet.io') {
+            toast.error('Switch your wallet to the SN Goerli!')
+            return false
+          }
+        }
 
         const res1 = await starknetX.account.execute(
           {
@@ -51,12 +67,6 @@ export default function Home() {
       }
     }
   }
-
-  useEffect(() => {
-    if(!isCondition){
-      router.push('/bundle')
-    }
-  },[])
 
   return (
     <div className="relative w-full h-full">
@@ -120,9 +130,10 @@ export default function Home() {
         </div>
       }
 
-      <div className="absolute bottom-[40px] w-full flex items-center justify-center" style={{ 'zIndex': '3' }}>
+      <div className="absolute bottom-[60px] w-full flex items-center justify-center" style={{ 'zIndex': '3' }}>
         <Step num={3} />
       </div>
+      <BotGif/>
     </div>
   )
 }

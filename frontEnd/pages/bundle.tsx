@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from "react";
 import Head from 'next/head'
-import Image from 'next/image'
 // import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import LoginConnect from "./../components/connect/LoginConnect";
@@ -25,6 +24,8 @@ import { shortenAddr } from './../lib/tool'
 // const inter = Inter({ subsets: ['latin'] })
 import Step from '../components/Step'
 import api from './../api'
+import Image from 'next/image'
+import BotGif from './../components/BotGif'
 
 const select = [{
   name: 'Hold a BABT',
@@ -82,10 +83,10 @@ export default function Home() {
   }
 
   const nextStep = () => {
-    if(selectTab[1]['check'] && 
+    if(selectTab[0]['check'] && 
+    selectTab[1]['check'] && 
     selectTab[2]['check'] && 
-    selectTab[3]['check'] && 
-    selectTab[4]['check'] 
+    selectTab[3]['check'] 
     ){
       router.push('/mint')
     }else{
@@ -95,7 +96,7 @@ export default function Home() {
 
   const getHavData = async (addr) => {
 
-    const res: any = await api.get(`/api/check?addresses=${addr}`);
+    let res: any = await api.get(`/api/check?addresses=${addr}`);
 
     if(res.babCheck){
       setSelectTab((pre:any) => {
@@ -127,10 +128,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if(selectTab[1]['check'] && 
+    if(selectTab[0]['check'] && 
+    selectTab[1]['check'] && 
     selectTab[2]['check'] && 
-    selectTab[3]['check'] && 
-    selectTab[4]['check'] 
+    selectTab[3]['check'] 
     ){
       setIsCondition(true)
     }else{
@@ -185,7 +186,7 @@ export default function Home() {
       <div className="h-[100%] w-1/2 flex items-center justify-center">
         <div className="h-[70%] w-full">
           <p className="text-[#BBE7E6] text-[24px] mb-6 mt-[73px]">Get a Crux SBT</p>
-          <div className=" border-solid border-[1px] border-[rgba(255,255,255,0.7)] p-8 px-20">
+          <div className=" border-solid border-[1px] border-[rgba(255,255,255,0.7)] p-4 px-10">
             <p className="text-[#BBE7E6] text-[24px] mb-6">Meet all below conditions</p>
             <div>
               {
@@ -250,9 +251,10 @@ export default function Home() {
         </div>
       }
 
-      <div className="absolute bottom-[40px] left-[50%] translate-x-[-50%] w-full flex items-center justify-center">
+      <div className="absolute bottom-[60px] left-[50%] translate-x-[-50%] w-full flex items-center justify-center">
         <Step num={2} />
       </div>
+      <BotGif/>
     </div>
   )
 }
